@@ -428,7 +428,7 @@ class VectorULong
     }
 
     // Перевизначення Equals і GetHashCode
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (obj == null || GetType() != obj.GetType())
             return false;
