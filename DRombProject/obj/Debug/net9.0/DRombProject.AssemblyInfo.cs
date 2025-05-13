@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DRombProject")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2157963ee105d724e9835940b978ab38bb158203")]
 [assembly: System.Reflection.AssemblyProductAttribute("DRombProject")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DRombProject")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

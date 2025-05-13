@@ -2,6 +2,7 @@ C:\Users\Alina Kornivska\lab4csharp25-Kornivska\DRombProject\obj\Debug\net9.0\DR
 C:\Users\Alina Kornivska\lab4csharp25-Kornivska\DRombProject\obj\Debug\net9.0\DRombProject.AssemblyInfoInputs.cache
 C:\Users\Alina Kornivska\lab4csharp25-Kornivska\DRombProject\obj\Debug\net9.0\DRombProject.AssemblyInfo.cs
 C:\Users\Alina Kornivska\lab4csharp25-Kornivska\DRombProject\obj\Debug\net9.0\DRombProject.csproj.CoreCompileInputs.cache
+C:\Users\Alina Kornivska\lab4csharp25-Kornivska\DRombProject\obj\Debug\net9.0\DRombProject.sourcelink.json
 C:\Users\Alina Kornivska\lab4csharp25-Kornivska\DRombProject\bin\Debug\net9.0\DRombProject.exe
 C:\Users\Alina Kornivska\lab4csharp25-Kornivska\DRombProject\bin\Debug\net9.0\DRombProject.deps.json
 C:\Users\Alina Kornivska\lab4csharp25-Kornivska\DRombProject\bin\Debug\net9.0\DRombProject.runtimeconfig.json

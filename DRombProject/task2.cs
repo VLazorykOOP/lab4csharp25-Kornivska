@@ -1,14 +1,20 @@
 using System;
 
+/// <summary>
+/// Клас для роботи з вектором беззнакових довгих цілих чисел (ulong).
+/// </summary>
 class VectorULong
 {
     // Поля
-    protected ulong[] IntArray;
-    protected uint size;
-    protected int codeError;
-    protected static uint num_vec = 0;
+    private readonly ulong[] IntArray; // Масив елементів вектора
+    private readonly uint size;       // Розмір вектора
+    private int codeError;            // Код помилки
+    private static uint num_vec = 0;  // Кількість створених векторів
 
     // Конструктори
+    /// <summary>
+    /// Конструктор за замовчуванням. Створює вектор розміром 1 із значенням 0.
+    /// </summary>
     public VectorULong()
     {
         size = 1;
@@ -18,27 +24,39 @@ class VectorULong
         num_vec++;
     }
 
+    /// <summary>
+    /// Конструктор із заданим розміром. Ініціалізує всі елементи значенням 0.
+    /// </summary>
+    /// <param name="size">Розмір вектора (повинен бути більше 0)</param>
+    /// <exception cref="ArgumentException">Якщо розмір <= 0</exception>
     public VectorULong(uint size)
     {
         this.size = size > 0 ? size : throw new ArgumentException("Розмір вектора має бути більше 0");
-        IntArray = new ulong[size];
-        for (int i = 0; i < size; i++)
-            IntArray[i] = 0;
+        IntArray = new ulong[this.size];
+        Array.Fill(IntArray, 0); // Оптимізоване заповнення нулями
         codeError = 0;
         num_vec++;
     }
 
+    /// <summary>
+    /// Конструктор із заданим розміром і значенням. Ініціалізує всі елементи заданим значенням.
+    /// </summary>
+    /// <param name="size">Розмір вектора (повинен бути більше 0)</param>
+    /// <param name="value">Значення для ініціалізації елементів</param>
+    /// <exception cref="ArgumentException">Якщо розмір <= 0</exception>
     public VectorULong(uint size, ulong value)
     {
         this.size = size > 0 ? size : throw new ArgumentException("Розмір вектора має бути більше 0");
-        IntArray = new ulong[size];
-        for (int i = 0; i < size; i++)
-            IntArray[i] = value;
+        IntArray = new ulong[this.size];
+        Array.Fill(IntArray, value); // Оптимізоване заповнення значенням
         codeError = 0;
         num_vec++;
     }
 
-    // Деструктор
+    // Деструктор (фіналізатор)
+    /// <summary>
+    /// Фіналізатор для виведення повідомлення про знищення об’єкта та оновлення лічильника.
+    /// </summary>
     ~VectorULong()
     {
         Console.WriteLine($"Вектор розміром {size} знищено.");
@@ -46,6 +64,9 @@ class VectorULong
     }
 
     // Методи
+    /// <summary>
+    /// Введення елементів вектора з консолі.
+    /// </summary>
     public void Input()
     {
         for (int i = 0; i < size; i++)
@@ -62,40 +83,55 @@ class VectorULong
         }
     }
 
+    /// <summary>
+    /// Виведення вектора та коду помилки.
+    /// </summary>
     public void Print()
     {
-        Console.Write("Вектор: [");
-        for (int i = 0; i < size; i++)
-            Console.Write(i < size - 1 ? $"{IntArray[i]}, " : $"{IntArray[i]}");
-        Console.WriteLine("]");
+        Console.WriteLine($"Вектор: [{string.Join(", ", IntArray)}]");
         Console.WriteLine($"Код помилки: {codeError}");
     }
 
+    /// <summary>
+    /// Присвоєння одного значення всім елементам вектора.
+    /// </summary>
+    /// <param name="value">Значення для присвоєння</param>
     public void Assign(ulong value)
     {
-        for (int i = 0; i < size; i++)
-            IntArray[i] = value;
+        Array.Fill(IntArray, value);
         codeError = 0;
     }
 
+    /// <summary>
+    /// Повертає кількість створених векторів.
+    /// </summary>
+    /// <returns>Кількість векторів</returns>
     public static uint GetVectorCount()
     {
         return num_vec;
     }
 
     // Властивості
-    public uint Size
-    {
-        get { return size; }
-    }
+    /// <summary>
+    /// Отримання розміру вектора (тільки для читання).
+    /// </summary>
+    public uint Size => size;
 
+    /// <summary>
+    /// Отримання та встановлення коду помилки.
+    /// </summary>
     public int CodeError
     {
-        get { return codeError; }
-        set { codeError = value; }
+        get => codeError;
+        set => codeError = value;
     }
 
     // Індексатор
+    /// <summary>
+    /// Доступ до елементів вектора за індексом із перевіркою меж.
+    /// </summary>
+    /// <param name="index">Індекс елемента</param>
+    /// <returns>Значення елемента або 0 при помилці</returns>
     public ulong this[int index]
     {
         get
@@ -123,20 +159,31 @@ class VectorULong
     }
 
     // Перевантаження унарних операторів
+    /// <summary>
+    /// Збільшує кожен елемент вектора на 1.
+    /// </summary>
     public static VectorULong operator ++(VectorULong vec)
     {
+        VectorULong result = new VectorULong(vec.size);
         for (int i = 0; i < vec.size; i++)
-            vec.IntArray[i]++;
-        return vec;
+            result.IntArray[i] = vec.IntArray[i] + 1;
+        return result;
     }
 
+    /// <summary>
+    /// Зменшує кожен елемент вектора на 1 (не нижче 0).
+    /// </summary>
     public static VectorULong operator --(VectorULong vec)
     {
+        VectorULong result = new VectorULong(vec.size);
         for (int i = 0; i < vec.size; i++)
-            vec.IntArray[i] = vec.IntArray[i] > 0 ? vec.IntArray[i] - 1 : 0;
-        return vec;
+            result.IntArray[i] = vec.IntArray[i] > 0 ? vec.IntArray[i] - 1 : 0;
+        return result;
     }
 
+    /// <summary>
+    /// Перевіряє, чи всі елементи вектора ненульові.
+    /// </summary>
     public static bool operator true(VectorULong vec)
     {
         if (vec.size == 0) return false;
@@ -145,6 +192,9 @@ class VectorULong
         return true;
     }
 
+    /// <summary>
+    /// Перевіряє, чи є хоча б один нульовий елемент у векторі.
+    /// </summary>
     public static bool operator false(VectorULong vec)
     {
         if (vec.size == 0) return true;
@@ -153,11 +203,17 @@ class VectorULong
         return false;
     }
 
+    /// <summary>
+    /// Перевіряє, чи вектор не порожній.
+    /// </summary>
     public static bool operator !(VectorULong vec)
     {
         return vec.size != 0;
     }
 
+    /// <summary>
+    /// Виконує побітове заперечення для кожного елемента вектора.
+    /// </summary>
     public static VectorULong operator ~(VectorULong vec)
     {
         VectorULong result = new VectorULong(vec.size);
@@ -167,6 +223,9 @@ class VectorULong
     }
 
     // Перевантаження арифметичних бінарних операторів
+    /// <summary>
+    /// Додає два вектори елемент за елементом.
+    /// </summary>
     public static VectorULong operator +(VectorULong v1, VectorULong v2)
     {
         uint maxSize = Math.Max(v1.size, v2.size);
@@ -180,6 +239,9 @@ class VectorULong
         return result;
     }
 
+    /// <summary>
+    /// Додає скаляр до кожного елемента вектора.
+    /// </summary>
     public static VectorULong operator +(VectorULong vec, ulong scalar)
     {
         VectorULong result = new VectorULong(vec.size);
@@ -188,6 +250,9 @@ class VectorULong
         return result;
     }
 
+    /// <summary>
+    /// Віднімає два вектори елемент за елементом (не нижче 0).
+    /// </summary>
     public static VectorULong operator -(VectorULong v1, VectorULong v2)
     {
         uint maxSize = Math.Max(v1.size, v2.size);
@@ -201,6 +266,9 @@ class VectorULong
         return result;
     }
 
+    /// <summary>
+    /// Віднімає скаляр від кожного елемента вектора (не нижче 0).
+    /// </summary>
     public static VectorULong operator -(VectorULong vec, ulong scalar)
     {
         VectorULong result = new VectorULong(vec.size);
@@ -209,6 +277,9 @@ class VectorULong
         return result;
     }
 
+    /// <summary>
+    /// Множить два вектори елемент за елементом.
+    /// </summary>
     public static VectorULong operator *(VectorULong v1, VectorULong v2)
     {
         uint maxSize = Math.Max(v1.size, v2.size);
@@ -222,6 +293,9 @@ class VectorULong
         return result;
     }
 
+    /// <summary>
+    /// Множить кожен елемент вектора на скаляр.
+    /// </summary>
     public static VectorULong operator *(VectorULong vec, ulong scalar)
     {
         VectorULong result = new VectorULong(vec.size);
@@ -230,6 +304,10 @@ class VectorULong
         return result;
     }
 
+    /// <summary>
+    /// Ділить два вектори елемент за елементом.
+    /// </summary>
+    /// <exception cref="DivideByZeroException">Якщо ділене = 0</exception>
     public static VectorULong operator /(VectorULong v1, VectorULong v2)
     {
         uint maxSize = Math.Max(v1.size, v2.size);
@@ -243,6 +321,10 @@ class VectorULong
         return result;
     }
 
+    /// <summary>
+    /// Ділить кожен елемент вектора на скаляр.
+    /// </summary>
+    /// <exception cref="DivideByZeroException">Якщо скаляр = 0</exception>
     public static VectorULong operator /(VectorULong vec, ulong scalar)
     {
         if (scalar == 0)
@@ -253,6 +335,10 @@ class VectorULong
         return result;
     }
 
+    /// <summary>
+    /// Отримує остачу від ділення двох векторів елемент за елементом.
+    /// </summary>
+    /// <exception cref="DivideByZeroException">Якщо ділене = 0</exception>
     public static VectorULong operator %(VectorULong v1, VectorULong v2)
     {
         uint maxSize = Math.Max(v1.size, v2.size);
@@ -266,6 +352,10 @@ class VectorULong
         return result;
     }
 
+    /// <summary>
+    /// Отримує остачу від ділення кожного елемента вектора на скаляр.
+    /// </summary>
+    /// <exception cref="DivideByZeroException">Якщо скаляр = 0</exception>
     public static VectorULong operator %(VectorULong vec, ulong scalar)
     {
         if (scalar == 0)
@@ -277,6 +367,9 @@ class VectorULong
     }
 
     // Перевантаження побітових бінарних операторів
+    /// <summary>
+    /// Виконує побітове АБО для двох векторів.
+    /// </summary>
     public static VectorULong operator |(VectorULong v1, VectorULong v2)
     {
         uint maxSize = Math.Max(v1.size, v2.size);
@@ -290,6 +383,9 @@ class VectorULong
         return result;
     }
 
+    /// <summary>
+    /// Виконує побітове АБО для вектора та скаляра.
+    /// </summary>
     public static VectorULong operator |(VectorULong vec, ulong scalar)
     {
         VectorULong result = new VectorULong(vec.size);
@@ -298,6 +394,9 @@ class VectorULong
         return result;
     }
 
+    /// <summary>
+    /// Виконує побітове XOR для двох векторів.
+    /// </summary>
     public static VectorULong operator ^(VectorULong v1, VectorULong v2)
     {
         uint maxSize = Math.Max(v1.size, v2.size);
@@ -311,6 +410,9 @@ class VectorULong
         return result;
     }
 
+    /// <summary>
+    /// Виконує побітове XOR для вектора та скаляра.
+    /// </summary>
     public static VectorULong operator ^(VectorULong vec, ulong scalar)
     {
         VectorULong result = new VectorULong(vec.size);
@@ -319,6 +421,9 @@ class VectorULong
         return result;
     }
 
+    /// <summary>
+    /// Виконує побітове І для двох векторів.
+    /// </summary>
     public static VectorULong operator &(VectorULong v1, VectorULong v2)
     {
         uint maxSize = Math.Max(v1.size, v2.size);
@@ -332,6 +437,9 @@ class VectorULong
         return result;
     }
 
+    /// <summary>
+    /// Виконує побітове І для вектора та скаляра.
+    /// </summary>
     public static VectorULong operator &(VectorULong vec, ulong scalar)
     {
         VectorULong result = new VectorULong(vec.size);
@@ -340,6 +448,9 @@ class VectorULong
         return result;
     }
 
+    /// <summary>
+    /// Виконує побітовий зсув праворуч для двох векторів.
+    /// </summary>
     public static VectorULong operator >>(VectorULong v1, VectorULong v2)
     {
         uint maxSize = Math.Max(v1.size, v2.size);
@@ -348,19 +459,25 @@ class VectorULong
         {
             ulong val1 = i < v1.size ? v1.IntArray[i] : 0;
             ulong val2 = i < v2.size ? v2.IntArray[i] : 0;
-            result.IntArray[i] = val1 >> (int)(val2 % 32); // Обмеження зсуву
+            result.IntArray[i] = val1 >> (int)(val2 % 64); // Коректне обмеження для ulong
         }
         return result;
     }
 
+    /// <summary>
+    /// Виконує побітовий зсув праворуч для вектора на задану кількість біт.
+    /// </summary>
     public static VectorULong operator >>(VectorULong vec, uint scalar)
     {
         VectorULong result = new VectorULong(vec.size);
         for (int i = 0; i < vec.size; i++)
-            result.IntArray[i] = vec.IntArray[i] >> (int)(scalar % 32);
+            result.IntArray[i] = vec.IntArray[i] >> (int)(scalar % 64); // Коректне обмеження для ulong
         return result;
     }
 
+    /// <summary>
+    /// Виконує побітовий зсув ліворуч для двох векторів.
+    /// </summary>
     public static VectorULong operator <<(VectorULong v1, VectorULong v2)
     {
         uint maxSize = Math.Max(v1.size, v2.size);
@@ -369,20 +486,26 @@ class VectorULong
         {
             ulong val1 = i < v1.size ? v1.IntArray[i] : 0;
             ulong val2 = i < v2.size ? v2.IntArray[i] : 0;
-            result.IntArray[i] = val1 << (int)(val2 % 32); // Обмеження зсуву
+            result.IntArray[i] = val1 << (int)(val2 % 64); // Коректне обмеження для ulong
         }
         return result;
     }
 
+    /// <summary>
+    /// Виконує побітовий зсув ліворуч для вектора на задану кількість біт.
+    /// </summary>
     public static VectorULong operator <<(VectorULong vec, uint scalar)
     {
         VectorULong result = new VectorULong(vec.size);
         for (int i = 0; i < vec.size; i++)
-            result.IntArray[i] = vec.IntArray[i] << (int)(scalar % 32);
+            result.IntArray[i] = vec.IntArray[i] << (int)(scalar % 64); // Коректне обмеження для ulong
         return result;
     }
 
     // Перевантаження операторів порівняння
+    /// <summary>
+    /// Порівнює два вектори на рівність.
+    /// </summary>
     public static bool operator ==(VectorULong v1, VectorULong v2)
     {
         if (ReferenceEquals(v1, null) || ReferenceEquals(v2, null))
@@ -394,20 +517,29 @@ class VectorULong
         return true;
     }
 
+    /// <summary>
+    /// Порівнює два вектори на нерівність.
+    /// </summary>
     public static bool operator !=(VectorULong v1, VectorULong v2)
     {
         return !(v1 == v2);
     }
 
+    /// <summary>
+    /// Перевіряє, чи перший вектор більше за другий.
+    /// </summary>
     public static bool operator >(VectorULong v1, VectorULong v2)
     {
         uint minSize = Math.Min(v1.size, v2.size);
         for (int i = 0; i < minSize; i++)
             if (v1.IntArray[i] <= v2.IntArray[i])
                 return false;
-        return v1.size >= v2.size;
+        return v1.size > v2.size || (v1.size == v2.size && minSize > 0);
     }
 
+    /// <summary>
+    /// Перевіряє, чи перший вектор більше або дорівнює другому.
+    /// </summary>
     public static bool operator >=(VectorULong v1, VectorULong v2)
     {
         uint minSize = Math.Min(v1.size, v2.size);
@@ -417,17 +549,26 @@ class VectorULong
         return v1.size >= v2.size;
     }
 
+    /// <summary>
+    /// Перевіряє, чи перший вектор менше за другий.
+    /// </summary>
     public static bool operator <(VectorULong v1, VectorULong v2)
     {
         return !(v1 >= v2);
     }
 
+    /// <summary>
+    /// Перевіряє, чи перший вектор менше або дорівнює другому.
+    /// </summary>
     public static bool operator <=(VectorULong v1, VectorULong v2)
     {
         return !(v1 > v2);
     }
 
     // Перевизначення Equals і GetHashCode
+    /// <summary>
+    /// Порівнює поточний об’єкт із іншим об’єктом.
+    /// </summary>
     public override bool Equals(object? obj)
     {
         if (obj == null || GetType() != obj.GetType())
@@ -436,6 +577,9 @@ class VectorULong
         return this == other;
     }
 
+    /// <summary>
+    /// Повертає хеш-код об’єкта.
+    /// </summary>
     public override int GetHashCode()
     {
         unchecked
@@ -449,6 +593,9 @@ class VectorULong
     }
 }
 
+/// <summary>
+/// Клас для запуску програми та тестування класу VectorULong.
+/// </summary>
 class Program
 {
     static void Main()
@@ -509,7 +656,7 @@ class Program
 
             v3.Assign(5);
             var v4 = ~v3;
-            Console.Write("v3 після ~: ");
+            Console.Write("v4 = ~v3: ");
             v4.Print();
 
             // Тестування бінарних арифметичних операторів
